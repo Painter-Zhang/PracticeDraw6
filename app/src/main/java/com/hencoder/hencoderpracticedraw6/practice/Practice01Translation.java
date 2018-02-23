@@ -22,6 +22,8 @@ public class Practice01Translation extends RelativeLayout {
     Button animateBt;
     ImageView imageView;
 
+    int actionTimes = 0;
+
     public Practice01Translation(Context context) {
         super(context);
     }
@@ -40,15 +42,55 @@ public class Practice01Translation extends RelativeLayout {
 
         animateBt = (Button) findViewById(R.id.animateBt);
         imageView = (ImageView) findViewById(R.id.imageView);
-        if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            // 给音乐图标加上合适的阴影
-            imageView.setOutlineProvider(new MusicOutlineProvider());
-        }
+//        if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//            // 给音乐图标加上合适的阴影
+//            imageView.setOutlineProvider(new MusicOutlineProvider());
+//        }
 
         animateBt.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
                 // TODO 在这里处理点击事件，通过 View.animate().translationX/Y/Z() 来让 View 平移
+                if (actionTimes % 3 == 0) {
+                    if (imageView.getTranslationX() == 500f) {
+                        imageView.animate().translationX(0);
+                        actionTimes++;
+                    } else {
+                        imageView.animate().translationX(500f);
+                    }
+                    return;
+                }
+
+                //translationY
+                if (actionTimes % 3 == 1) {
+                    if (imageView.getTranslationY() == 200f) {
+                        imageView.animate().translationY(0);
+                        actionTimes++;
+                    } else {
+                        imageView.animate().translationY(200f);
+
+                    }
+                    return;
+                }
+
+                //translationZ
+                if (actionTimes % 3 == 2) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (imageView.getTranslationZ() == 15f) {
+                            imageView.animate().translationZ(0);
+                            imageView.setOutlineProvider(null);
+                            actionTimes++;
+                        } else {
+                            imageView.animate().translationZ(15f);
+                            // 给音乐图标加上合适的阴影
+                            imageView.setOutlineProvider(new MusicOutlineProvider());
+                        }
+                    } else {
+                        actionTimes++;
+                    }
+                    return;
+                }
+
             }
         });
     }
